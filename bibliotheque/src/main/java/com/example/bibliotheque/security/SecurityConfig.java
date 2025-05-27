@@ -1,6 +1,5 @@
 package com.example.bibliotheque.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -17,16 +16,18 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SecurityConfig {
 
-    private final CustomUserDetailsService userDetailService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/public").permitAll()
-                    .anyRequest().authenticated())
-            .httpBasic(Customizer.withDefaults());
+                    .requestMatchers("/auth/users","/auth/register", "/auth/login").permitAll()
+                    .anyRequest().authenticated()
+                    )
+            .httpBasic(Customizer.withDefaults())
+            ;
 
         return http.build();
     }
@@ -40,7 +41,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http
             .getSharedObject(AuthenticationManagerBuilder.class)
-            .userDetailsService(userDetailService)
+            .userDetailsService(customUserDetailsService)
             .passwordEncoder(passwordEncoder())
             .and()
             .build();
