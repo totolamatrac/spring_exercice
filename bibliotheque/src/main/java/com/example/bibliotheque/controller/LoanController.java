@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("/loans")
 @AllArgsConstructor
 public class LoanController {
-    
+
     private LoanService loanService;
 
     @PostMapping()
@@ -34,8 +34,9 @@ public class LoanController {
     public ApiResponse<LoanResponse> loanBook(@RequestBody @Valid LoanRequest req) {
         try {
             Loan resp = this.loanService.loanBook(req);
-            LoanResponse respParsed = new LoanResponse(resp.getId(), resp.getUser().getEmail(), resp.getBook().getTitle(), resp.getLoanDate(), resp.getReturnDateTime());
-            return ApiResponse.success(respParsed);    
+            LoanResponse respParsed = new LoanResponse(resp.getId(), resp.getUser().getEmail(),
+                    resp.getBook().getTitle(), resp.getLoanDate(), resp.getReturnDateTime());
+            return ApiResponse.success(respParsed);
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -44,10 +45,11 @@ public class LoanController {
     @PutMapping("/{idLoan}/return")
     @PreAuthorize("hasRole('ROLE_READER')")
     public ApiResponse<LoanResponse> returnBook(@PathVariable long idLoan) {
-        
+
         try {
-            Loan resp = this.loanService.returnBook(idLoan);    
-            return ApiResponse.success(new LoanResponse(resp.getId(),resp.getUser().getEmail(), resp.getBook().getTitle(), resp.getLoanDate(), resp.getReturnDateTime()));
+            Loan resp = this.loanService.returnBook(idLoan);
+            return ApiResponse.success(new LoanResponse(resp.getId(), resp.getUser().getEmail(),
+                    resp.getBook().getTitle(), resp.getLoanDate(), resp.getReturnDateTime()));
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -58,7 +60,9 @@ public class LoanController {
     public ApiResponse<List<LoanResponse>> getAllLoanAuthentificated() {
         try {
             List<Loan> resp = loanService.getAllLoansByUser();
-            List<LoanResponse> respParsed = resp.stream().map(el -> new LoanResponse(el.getId(), el.getUser().getEmail(), el.getBook().getTitle(), el.getLoanDate(), el.getReturnDateTime())).toList();
+            List<LoanResponse> respParsed = resp.stream().map(el -> new LoanResponse(el.getId(),
+                    el.getUser().getEmail(), el.getBook().getTitle(), el.getLoanDate(), el.getReturnDateTime()))
+                    .toList();
             return ApiResponse.success(respParsed);
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -66,14 +70,13 @@ public class LoanController {
             return ApiResponse.error(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     @GetMapping()
     @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
     public ApiResponse<List<LoanResponse>> getAll() {
         List<Loan> resp = loanService.getAll();
-        List<LoanResponse> respParsed = resp.stream().map(el -> new LoanResponse(el.getId(), el.getUser().getEmail(), el.getBook().getTitle(), el.getLoanDate(), el.getReturnDateTime())).toList();
+        List<LoanResponse> respParsed = resp.stream().map(el -> new LoanResponse(el.getId(), el.getUser().getEmail(),
+                el.getBook().getTitle(), el.getLoanDate(), el.getReturnDateTime())).toList();
         return ApiResponse.success(respParsed);
     }
-    
-    
 }

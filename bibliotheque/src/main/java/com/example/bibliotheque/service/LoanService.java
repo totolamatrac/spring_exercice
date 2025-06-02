@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.example.bibliotheque.dto.LoanRequest;
@@ -45,6 +42,7 @@ public class LoanService {
         Book b = loan.getBook();
         b.setAvailable(true);
         bookRepository.save(b);
+        loan.setReturnDateTime(LocalDateTime.now());
         return loan;
     }
 

@@ -15,7 +15,7 @@ public class Loan {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -38,7 +38,7 @@ public class Loan {
         this.user = user;
         this.book = book;
         this.loanDate = LocalDateTime.now();
-        this.returnDateTime = LocalDateTime.now().plusMonths(1);
+        this.returnDateTime = null;
     }
 
     public long getId() {

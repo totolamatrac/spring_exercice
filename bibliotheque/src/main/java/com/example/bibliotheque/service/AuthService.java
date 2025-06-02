@@ -48,8 +48,4 @@ public class AuthService {
         User save = this.userRepository.save(user);
         return new UserResponse(save.getUsername(), save.getEmail());
     } 
-
-    public List<User> getAll() {
-        return userRepository.findAll();
-    }
 }

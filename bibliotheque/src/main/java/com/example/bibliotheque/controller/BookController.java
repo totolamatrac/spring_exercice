@@ -16,10 +16,10 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
@@ -51,11 +51,11 @@ public class BookController {
         }
     }
 
-    @PutMapping("/{idBook}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
-    public ApiResponse<String> remove(@PathVariable long idBook) {
+    public ApiResponse<String> remove(@PathVariable long id) {
         try {
-            this.bookService.remove(idBook);
+            this.bookService.remove(id);
             return ApiResponse.success("Le livre a bien été supprimé");
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(e.getMessage(), HttpStatus.CONFLICT);
