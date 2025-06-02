@@ -1,0 +1,17 @@
+CREATE TABLE role (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role_id BIGINT,
+    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id)
+);
+
+
+INSERT INTO role (id, name) VALUES (1, 'ROLE_READER');
+INSERT INTO role (id, name) VALUES (2, 'ROLE_LIBRARIAN');
